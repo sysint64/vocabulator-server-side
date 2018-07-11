@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 
-from vocabulator.words.models import Category, Word
+from vocabulator.words.forms import DefinitionInlineForm
+from vocabulator.words.models import Category, Word, Definition
 
 
 class HasTranslationFilter(SimpleListFilter):
@@ -20,10 +21,19 @@ class HasTranslationFilter(SimpleListFilter):
             return queryset
 
 
+class DefinitionInline(admin.StackedInline):
+    model = Definition
+    extra = 0
+    form = DefinitionInlineForm
+
+
 @admin.register(Word)
 class WordsAdmin(admin.ModelAdmin):
     list_filter = "category", HasTranslationFilter,
     list_display = "name", "has_translation", "category",
+    inlines = [
+        DefinitionInline,
+    ]
 
     def has_translation(self, obj):
         return "+" if obj.has_translation else "-"
