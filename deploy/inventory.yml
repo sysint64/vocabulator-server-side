@@ -1,0 +1,6 @@
+andrey:
+  hosts:
+    web:
+      ansible_host: 35.237.116.16
+      ansible_user: andrey
+      ansible_become: true

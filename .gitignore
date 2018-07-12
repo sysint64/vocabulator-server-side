@@ -12,3 +12,5 @@ __pycache__/
 gentelella/
 frontend/static/vendors/
 db.sqlite3
+deploy/.vault_key
+deploy/*.retry

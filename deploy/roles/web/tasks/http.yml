@@ -1,0 +1,42 @@
+---
+- name: copy nginx config
+  template: src=nginx_{{ nginx_scheme }}.j2 dest=/etc/nginx/sites-available/{{ env_name }}
+  notify:
+    - restart nginx
+
+- name: create symlink nginx config
+  file: src=/etc/nginx/sites-available/{{ env_name }} dest=/etc/nginx/sites-enabled/{{ env_name }} state=link
+
+# Remove default nginx
+- name: disable the default site
+  file:
+    path: "/etc/nginx/sites-enabled/default"
+    state: absent
+  notify:
+    - restart nginx
+
+# Gunicorn Log / Run folders
+- name: create gunicorn log directory
+  file: path=/var/log/gunicorn owner={{ project_linux_user }} group={{ project_linux_group }} state=directory
+
+- name: create gunicorn run directory
+  file: path=/var/run/gunicorn owner={{ project_linux_user }} group={{ project_linux_group }} state=directory
+
+# Gunicorn systemd
+- name: copy gunicorn systemd
+  template: src=gunicorn.service.j2 dest=/etc/systemd/system/{{ env_name }}_gunicorn.service
+  notify:
+    - restart gunicorn
+    - restart gunicorn socket
+
+- name: copy gunicorn systemd socket
+  template: src=gunicorn.socket.j2 dest=/etc/systemd/system/{{ env_name }}_gunicorn.socket
+  notify:
+    - restart gunicorn
+    - restart gunicorn socket
+
+- name: copy gunicorn gunicorn conf
+  template: src=gunicorn.conf.j2 dest=/etc/tmpfiles.d/{{ env_name }}_gunicorn.conf
+  notify:
+    - restart gunicorn
+    - restart gunicorn socket

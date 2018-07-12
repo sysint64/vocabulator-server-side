@@ -1,0 +1,11 @@
+---
+- name: Depoy application to google cloud server
+  hosts: andrey
+  remote_user: andrey
+
+  environment:
+    DJANGO_SETTINGS_MODULE: "{{ DJANGO_SETTINGS_MODULE }}"
+
+  roles:
+    - web
+    - project

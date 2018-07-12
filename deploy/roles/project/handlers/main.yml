@@ -1,0 +1,6 @@
+---
+- name: restart gunicorn socket
+  service: name={{ env_name }}_gunicorn.socket state=restarted enabled=yes daemon_reload=yes
+
+- name: restart gunicorn
+  service: name={{ env_name }}_gunicorn.service state=restarted enabled=yes daemon_reload=yes

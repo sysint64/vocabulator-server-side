@@ -1,0 +1,25 @@
+from {{ project_namespace }}.settings import *
+
+DEBUG = {{ django_debug }}
+SECRET_KEY = '{{ django_secret_key }}'
+
+STATIC_ROOT = os.path.join("{{ project_static_media_dir }}", "static")
+MEDIA_ROOT = os.path.join("{{ project_static_media_dir }}", "media")
+
+ALLOWED_HOSTS = [
+    "{{ django_allowed_host }}"
+]
+
+STATIC_URL = '{{ nginx_scheme }}://{{ nginx_server_full_name }}/static/'
+MEDIA_URL = '{{ nginx_scheme }}://{{ nginx_server_full_name }}/media/'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': '{{ db_name }}',
+        'USER': '{{ db_user }}',
+        'PASSWORD': '{{ db_user_passwd }}',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
+}

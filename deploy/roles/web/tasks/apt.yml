@@ -1,0 +1,29 @@
+---
+
+# PostgreSQL Debian
+- name: add an apt key for postgresql
+  when: ansible_distribution == 'Debian'
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+
+- name: manually update apt-key until bus is fixed
+  shell: apt-key update
+
+# Install
+- name: install packages
+  when: ansible_os_family == "Debian"
+  apt: pkg={{ item.name }} state=present
+  with_items:
+  - name: unzip
+  - name: nginx
+  - name: python-pip
+  - name: python3.6
+  - name: python3.6-dev
+  - name: python3.6-venv
+  - name: virtualenv
+  - name: git
+  - name: gettext
+  - name: python-psycopg2
+  - name: postgresql-10
+  - name: postgresql-server-dev-10
+  - name: postgresql-client-10

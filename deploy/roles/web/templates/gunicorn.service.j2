@@ -1,0 +1,32 @@
+[Unit]
+Description={{ env_name }} gunicorn daemon
+Requires={{ env_name }}_gunicorn.socket
+After=network.target
+
+[Service]
+PIDFile=/var/run/gunicorn/{{ env_name }}.pid
+User={{ project_linux_user }}
+Group={{ project_linux_group }}
+{#RuntimeDirectory=gunicorn#}
+{#WorkingDirectory={{ project_work_tree }}/src#}
+ExecStart={{ project_virtualenv_dir }}/bin/gunicorn --chdir {{ project_work_tree }}/src \
+    --workers={{ gunicorn_workers }} \
+{#    --bind={{ nginx_host }}:{{ nginx_port }} \#}
+    --bind unix:/run/gunicorn/{{ env_name }}_socket \
+    --pid=/var/run/gunicorn/{{ env_name }}.pid \
+    --error-logfile /var/log/gunicorn/{{ env_name }}.errors.log \
+    --access-logfile /var/log/gunicorn/{{ env_name }}.access.log \
+    --access-logformat "%(t)s \"%(r)s %(h)s\" %(s)s %(D)s microseconds" \
+    {{ project_namespace }}.wsgi:application
+
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+
+Environment=DJANGO_SETTINGS_MODULE="{{ DJANGO_SETTINGS_MODULE }}"
+Environment=LANG=en_US.utf8
+Environment=LANGUAGE=en_US.utf8
+Environment=LC_ALL=en_US.utf8
+
+[Install]
+WantedBy=multi-user.target
