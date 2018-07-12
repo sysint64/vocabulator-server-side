@@ -29,7 +29,7 @@ class DefinitionInline(admin.StackedInline):
 
 @admin.register(Word)
 class WordsAdmin(admin.ModelAdmin):
-    list_filter = "category", HasTranslationFilter,
+    list_filter = "category", HasTranslationFilter, "need_clarify",
     list_display = "name", "has_translation", "category",
     inlines = [
         DefinitionInline,

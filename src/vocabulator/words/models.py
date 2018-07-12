@@ -14,6 +14,7 @@ class Word(models.Model):
     name = models.CharField(max_length=255)
     translation = models.CharField(max_length=255, blank=True)
     pronounce = models.CharField(max_length=255, blank=True)
+    need_clarify = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
