@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -85,6 +86,14 @@ DATABASES = {
     }
 }
 
+PROTO_ROOT = os.path.join(BASE_DIR, "../protos")
+PROTOS = [
+    ("sync.proto", "vocabulator/grpc_api/generated")
+]
+
+GRPC_SERVICES = [
+    "vocabulator.grpc_api"
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
