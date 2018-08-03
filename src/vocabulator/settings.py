@@ -40,7 +40,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
-    'vocabulator.words.apps.WordsConfig'
+    'vocabulator.words.apps.WordsConfig',
+    'vocabulator.grpc_api.apps.GrpcApiConfig'
 ]
 
 MIDDLEWARE = [
