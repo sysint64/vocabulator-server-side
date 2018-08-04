@@ -22,6 +22,13 @@
 - name: create gunicorn run directory
   file: path=/var/run/gunicorn owner={{ project_linux_user }} group={{ project_linux_group }} state=directory
 
+# Grpc Log / Run folders
+- name: create grpc log directory
+  file: path=/var/log/grpc owner={{ project_linux_user }} group={{ project_linux_group }} state=directory
+
+- name: create grpc run directory
+  file: path=/var/run/grpc owner={{ project_linux_user }} group={{ project_linux_group }} state=directory
+
 # Gunicorn systemd
 - name: copy gunicorn systemd
   template: src=gunicorn.service.j2 dest=/etc/systemd/system/{{ env_name }}_gunicorn.service
@@ -35,8 +42,14 @@
     - restart gunicorn
     - restart gunicorn socket
 
-- name: copy gunicorn gunicorn conf
+- name: copy gunicorn conf
   template: src=gunicorn.conf.j2 dest=/etc/tmpfiles.d/{{ env_name }}_gunicorn.conf
   notify:
     - restart gunicorn
     - restart gunicorn socket
+
+# Grpc systemd
+- name: copy grpc systemd
+  template: src=grpc.service.j2 dest=/etc/systemd/system/{{ env_name }}_grpc.service
+  notify:
+    - restart grpc

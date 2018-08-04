@@ -1,0 +1,20 @@
+[Unit]
+Description={{ env_name }} grpc daemon
+After=network.target
+
+[Service]
+PIDFile=/var/run/grpc/{{ env_name }}.pid
+User={{ project_linux_user }}
+Group={{ project_linux_group }}
+ExecStart={{ project_virtualenv_dir }}/bin/python {{ project_work_tree }}/src/manage.py grpc_run_server
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+
+Environment=DJANGO_SETTINGS_MODULE="{{ DJANGO_SETTINGS_MODULE }}"
+Environment=LANG=en_US.utf8
+Environment=LANGUAGE=en_US.utf8
+Environment=LC_ALL=en_US.utf8
+
+[Install]
+WantedBy=multi-user.target
