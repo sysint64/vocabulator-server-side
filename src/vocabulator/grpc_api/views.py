@@ -16,5 +16,5 @@ class Sync(SyncServicer):
 
         return SyncGrpcResponse(
             categories=grpc_repeated(grpc_category, Category.objects.all()),
-            words=grpc_repeated(grpc_word, Word.objects.all())
+            words=grpc_repeated(grpc_word, Word.objects.exclude(translation="").exclude(need_clarify=True))
         )
