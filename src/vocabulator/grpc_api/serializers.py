@@ -21,7 +21,8 @@ def grpc_word(word):
         name=word.name,
         translations=word.translation,
         pronounce=word.pronounce,
-        definitions=grpc_repeated(grpc_definition, word.definitions.all())
+        definitions=grpc_repeated(grpc_definition, word.definitions.all()),
+        score=word.score
     )
 
 
