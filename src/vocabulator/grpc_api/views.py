@@ -10,9 +10,11 @@ class Sync(SyncServicer):
     def Sync(self, request, context):
         with transaction.atomic():
             for word_request in request.words:
-                word = Word.objects.get(id=word_request.id)
-                word.score = min(max(word.score + word_request.scoreDelta, 1), 100)
-                word.save()
+                word = Word.objects.filter(id=word_request.id).first()
+
+                if word is not None:
+                    word.score = min(max(word.score + word_request.scoreDelta, 1), 100)
+                    word.save()
 
         return SyncGrpcResponse(
             categories=grpc_repeated(grpc_category, Category.objects.all()),
