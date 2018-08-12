@@ -17,7 +17,7 @@ class Sync(SyncServicer):
                     word.save()
 
             for new_word_request in request.newWords:
-                Word.objects.create(name=new_word_request.name, transaction=new_word_request.transaction)
+                Word.objects.create(name=new_word_request.name, translation=new_word_request.translation)
 
         return SyncGrpcResponse(
             languages=grpc_repeated(grpc_language, Language.objects.all()),
