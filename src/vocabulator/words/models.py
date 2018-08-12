@@ -18,13 +18,13 @@ class Category(models.Model):
 
 
 class Word(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=255, blank=True)
     translation = models.CharField(max_length=255, blank=True)
     pronounce = models.CharField(max_length=255, blank=True)
     need_clarify = models.BooleanField(default=False)
     score = models.IntegerField(default=0)
-    association_image = models.ImageField(null=True)
+    association_image = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return self.name
