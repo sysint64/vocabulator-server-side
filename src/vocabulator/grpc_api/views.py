@@ -3,7 +3,7 @@ from django.db import transaction
 from vocabulator.grpc_api.generated.sync_pb2 import SyncGrpcResponse
 from vocabulator.grpc_api.generated.sync_pb2_grpc import SyncServicer
 from vocabulator.grpc_api.serializers import *
-from vocabulator.words.models import Category, Word
+from vocabulator.words.models import Category, Word, Language
 
 
 class Sync(SyncServicer):
@@ -16,7 +16,11 @@ class Sync(SyncServicer):
                     word.score = min(max(word.score + word_request.scoreDelta, 1), 100)
                     word.save()
 
+            for new_word_request in request.newWords:
+                Word.objects.create(name=new_word_request.name, transaction=new_word_request.transaction)
+
         return SyncGrpcResponse(
+            languages=grpc_repeated(grpc_language, Language.objects.all()),
             categories=grpc_repeated(grpc_category, Category.objects.all()),
             words=grpc_repeated(grpc_word, Word.objects.exclude(translation="").exclude(need_clarify=True))
         )

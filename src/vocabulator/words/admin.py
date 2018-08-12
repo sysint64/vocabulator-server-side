@@ -43,6 +43,7 @@ class WordsAdmin(admin.ModelAdmin):
     list_filter = "category", HasTranslationFilter, "need_clarify",
     list_display = "name", "has_translation", "category",
     exclude = "score",
+    search_fields = "name", "translation"
     inlines = [
         ExampleInline,
         DefinitionInline,
