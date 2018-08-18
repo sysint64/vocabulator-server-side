@@ -19,8 +19,8 @@ class Sync(SyncServicer):
             for new_word_request in request.newWords:
                 Word.objects.create(name=new_word_request.name, translation=new_word_request.translation)
 
-        return SyncGrpcResponse(
-            languages=grpc_repeated(grpc_language, Language.objects.all()),
-            categories=grpc_repeated(grpc_category, Category.objects.all()),
-            words=grpc_repeated(grpc_word, Word.objects.exclude(translation="").exclude(need_clarify=True))
-        )
+            return SyncGrpcResponse(
+                languages=grpc_repeated(grpc_language, Language.objects.all()),
+                categories=grpc_repeated(grpc_category, Category.objects.all()),
+                words=grpc_repeated(grpc_word, Word.objects.exclude(translation="").exclude(need_clarify=True))
+            )

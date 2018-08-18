@@ -28,19 +28,32 @@ def grpc_category(category):
 
 
 def grpc_word(word):
-    return WordGrpcResponse(
-        id=word.id,
-        langaugeId=word.category.language_id,
-        categoryId=word.category.id,
-        name=word.name,
-        translations=word.translation,
-        pronounce=word.pronounce,
-        definitions=grpc_repeated(grpc_definition, word.definitions.all()),
-        score=word.score,
-        association_image=media_url(word.association_image),
-        examples=grpc_repeated(grpc_example, word.examples.all()),
-        kanji=grpc_repeated(grpc_kanji, word.kanji.all())
-    )
+    if word.category is not None:
+        return WordGrpcResponse(
+            id=word.id,
+            langaugeId=word.category.language_id,
+            categoryId=word.category.id,
+            name=word.name,
+            translations=word.translation,
+            pronounce=word.pronounce,
+            definitions=grpc_repeated(grpc_definition, word.definitions.all()),
+            score=word.score,
+            association_image=media_url(word.association_image),
+            examples=grpc_repeated(grpc_example, word.examples.all()),
+            kanji=grpc_repeated(grpc_kanji, word.kanji.all())
+        )
+    else:
+        return WordGrpcResponse(
+            id=word.id,
+            name=word.name,
+            translations=word.translation,
+            pronounce=word.pronounce,
+            definitions=grpc_repeated(grpc_definition, word.definitions.all()),
+            score=word.score,
+            association_image=media_url(word.association_image),
+            examples=grpc_repeated(grpc_example, word.examples.all()),
+            kanji=grpc_repeated(grpc_kanji, word.kanji.all())
+        )
 
 
 def grpc_definition(definition):
