@@ -41,7 +41,7 @@ class KanjiInline(admin.TabularInline):
 @admin.register(Word)
 class WordsAdmin(admin.ModelAdmin):
     list_filter = "category", HasTranslationFilter, "need_clarify",
-    list_display = "name", "has_translation", "category",
+    list_display = "display_name", "has_translation", "category",
     exclude = "score",
     search_fields = "name", "translation"
     inlines = [
@@ -49,6 +49,12 @@ class WordsAdmin(admin.ModelAdmin):
         DefinitionInline,
         KanjiInline
     ]
+
+    def display_name(self, obj):
+        if (obj.name.strip() == ""):
+            return obj.translation
+        else:
+            return obj.name
 
     def has_translation(self, obj):
         return "+" if obj.has_translation else "-"
